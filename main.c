@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include "dictionary.c"
 
 void* lemalloc(size_t size, const char *file, int line, const char *func)
 {
@@ -16,4 +17,6 @@ int main(int argc, char* arguments[]){
     int* ip = (int*)malloc(sizeof(int));
     *ip = 3;
     printf("number is: %d\n",*ip);
+    Dict dictionary = create_dict();
+    printf("dict is: %p",dictionary);
 }
