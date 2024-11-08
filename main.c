@@ -14,9 +14,12 @@ void* lemalloc(size_t size, const char *file, int line, const char *func)
 
 
 int main(int argc, char* arguments[]){
-    int* ip = (int*)malloc(sizeof(int));
+    size_t* ip = (size_t*)malloc(sizeof(int));
     *ip = 3;
-    printf("number is: %d\n",*ip);
-    Dict dictionary = create_dict();
-    printf("dict is: %p",dictionary);
+    printf("number is: %li\n",*ip);
+    Dict dictionary = new_dict();
+    printf("dict is: %p\n",dictionary);
+    Pair pair = new_pair(*ip,"someone");
+    printf("pair is: %p\nlocation: %li, owner: %s\n",pair,pair->location,pair->owner);
+    dict_add(dictionary,pair);
 }
