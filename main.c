@@ -4,11 +4,11 @@
 #include "dictionary.c"
 Dict allocations;
 
-void* lemalloc(size_t size, const char *file, int line, const char *func)
+void* lemalloc(size_t size, const char* file, int line, const char* func)
 {
     void *p = malloc(size);
     printf ("Allocated: File: %s, Line: %d, Func: %s, Memory: %p (%li bytes)\n", file, line, func,p,size);
-    MemoryTrack track = new_track((int)p,file,func,line);
+    MemoryTrack track = new_track(p,file,func,line);
     if(allocations == NULL){
         allocations = new_dict();
     }
@@ -18,6 +18,12 @@ void* lemalloc(size_t size, const char *file, int line, const char *func)
 
 #define malloc(X) lemalloc( X, __FILE__, __LINE__, __FUNCTION__)
 
+void* lefree(void* p,const char* file, int line, const char* func)
+{
+
+}
+
+#define free(X) lefree( X, __FILE__, __LINE__, __FUNCTION__)
 
 int main(int argc, char* arguments[]){
     int* ip = (int*)malloc(sizeof(int));
