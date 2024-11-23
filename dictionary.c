@@ -32,7 +32,6 @@ struct dict{
 
 Dict new_dict(){
     Dict dict = (Dict)malloc(sizeof(struct dict));
-    dict->first_node = (Node)malloc(sizeof(struct node));
     return dict;
 }
 
@@ -81,4 +80,13 @@ void dict_remove(Dict dict, void* address){
     }
 }
 
+void dict_print(Dict dict){
+    Node node = dict->first_node;
+    while(1){
+        if(node == NULL) return;
+        MemoryTrack track = node->track;
+        printf("Address: %p, File Name: %s, Function Name: %s, Line Number: %d\n",track->address,track->file_name,track->function_name,track->line_number);
+        node = node->next_node;
+    }
+}
 
