@@ -67,8 +67,13 @@ void de_allocate_all(Node node){
 void dict_remove(Dict dict, void* address){
     //todo: handle when location is not in dictionary
     Node first_node = dict->first_node;
+    if(first_node == NULL) return;
+    if(first_node->track == NULL) return;
+    if(first_node->track->address == NULL) return;
     if(first_node->track->address == address){
+        dict->first_node = first_node->next_node;
         de_allocate_all(first_node);
+        return;
     }
     Node previous_node = first_node;
     Node node = first_node->next_node;
@@ -76,12 +81,16 @@ void dict_remove(Dict dict, void* address){
         if(node->track->address == address){
             previous_node->next_node = node->next_node;
             de_allocate_all(node);
+            return;
         }
+        previous_node = node;
+        node = node->next_node;
     }
 }
 
 void dict_print(Dict dict){
     Node node = dict->first_node;
+    printf("Dictionary is: \n");
     while(1){
         if(node == NULL) return;
         MemoryTrack track = node->track;
