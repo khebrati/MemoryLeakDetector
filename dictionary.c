@@ -24,6 +24,12 @@ struct node{
     Node next_node;
 };
 
+Node new_node(MemoryTrack track){
+    Node new_node = (Node)malloc(sizeof(struct node));
+    new_node->track = track;
+    new_node->next_node = NULL;
+}
+
 typedef struct dict* Dict;
 struct dict{
     Node first_node;
@@ -39,17 +45,14 @@ void dict_add(Dict dict,MemoryTrack track){
     //todo: handle if dict is null
     Node first_node = dict->first_node;
     if(first_node == NULL){
-        Node new_node = (Node)malloc(sizeof(struct node));
-        new_node->track = track;
-        dict->first_node = new_node;
+        dict->first_node = new_node(track);
         return;
     }
     Node previous_node = first_node;
     Node node = first_node->next_node;
     while(1){
         if(node == NULL){
-            node = (Node)malloc(sizeof(struct node));
-            node->track = track;
+            node = new_node(track);
             previous_node->next_node = node;
             return;
         }
@@ -59,11 +62,12 @@ void dict_add(Dict dict,MemoryTrack track){
 }
 void dict_free(Dict dict){
     Node node = dict->first_node;
-    while(1){
-        if(node == NULL) return;
-        free(node);
+    Node next_node;
+    while(node != NULL){
         if(node->track != NULL) free(node->track);
-        node = node->next_node;
+        next_node = node->next_node;
+        free(node);
+        node = next_node;
     }
 }
 
@@ -101,7 +105,7 @@ void dict_remove(Dict dict, void* address){
 void dict_print(Dict dict,int toFile,char* file_location){
     Node node = dict->first_node;
     char* intro = "There are memory leaks in: \n";
-    printf(intro);
+    printf("%s",intro);
     FILE* file;
     if(toFile) {
         file = fopen(file_location, "w");

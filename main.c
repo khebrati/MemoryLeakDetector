@@ -25,9 +25,21 @@ void* lefree(void* p)
 
 #define free(X) lefree(X)
 
-int main(int argc, char* arguments[]){
-    int* i = (int*)malloc(sizeof(int));
+void on_exit_function(){
     dict_print(allocations,1,"MemoryLeak");
-    free(i);
     dict_free(allocations);
 }
+
+void memory_playground(){
+    int* i = (int*)malloc(sizeof(int));
+    char* c = (char*)malloc(sizeof(char));
+}
+
+int main(int argc, char* arguments[]){
+    if(atexit(on_exit_function) != 0){
+        perror("Error registering on exit function");
+        return EXIT_FAILURE;
+    }
+    memory_playground();
+}
+
