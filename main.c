@@ -26,19 +26,8 @@ void* lefree(void* p)
 #define free(X) lefree(X)
 
 int main(int argc, char* arguments[]){
-    int* ip = (int*)malloc(sizeof(int));
-    *ip = 4;
-    int* i2p = (int*)malloc(sizeof(int));
-    *i2p = 10;
-    int* i3p = (int*)malloc(sizeof(int));
-    char* character = (char*)malloc(sizeof(char));
-    *character = 'h';
-    dict_print(allocations);
-    free(i3p);
-    dict_print(allocations);
-    free(i2p);
-    dict_print(allocations);
-    free(ip);
-    free(character);
-    dict_print(allocations);
+    int* i = (int*)malloc(sizeof(int));
+    dict_print(allocations,1,"MemoryLeak");
+    free(i);
+    dict_free(allocations);
 }

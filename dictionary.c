@@ -57,6 +57,15 @@ void dict_add(Dict dict,MemoryTrack track){
         node = node->next_node;
     }
 }
+void dict_free(Dict dict){
+    Node node = dict->first_node;
+    while(1){
+        if(node == NULL) return;
+        free(node);
+        if(node->track != NULL) free(node->track);
+        node = node->next_node;
+    }
+}
 
 void de_allocate_all(Node node){
     node->next_node = NULL;
@@ -85,17 +94,33 @@ void dict_remove(Dict dict, void* address){
         }
         previous_node = node;
         node = node->next_node;
+        if(node == NULL) return;
     }
 }
 
-void dict_print(Dict dict){
+void dict_print(Dict dict,int toFile,char* file_location){
     Node node = dict->first_node;
-    printf("Dictionary is: \n");
+    char* intro = "There are memory leaks in: \n";
+    printf(intro);
+    FILE* file;
+    if(toFile) {
+        file = fopen(file_location, "w");
+        if (file == NULL) {
+            perror("Error creating file");
+        }
+        fprintf(file, "%s", intro);
+    }
     while(1){
         if(node == NULL) return;
         MemoryTrack track = node->track;
         printf("Address: %p, File Name: %s, Function Name: %s, Line Number: %d\n",track->address,track->file_name,track->function_name,track->line_number);
+        if(toFile){
+            fprintf(file,"Address: %p, File Name: %s, Function Name: %s, Line Number: %d\n",track->address,track->file_name,track->function_name,track->line_number);
+        }
         node = node->next_node;
     }
-}
+    if(toFile){
+        fclose(file);
+    }
 
+}
